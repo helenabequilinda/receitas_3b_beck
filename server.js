@@ -22,16 +22,34 @@ servidor.post('/usuarios', async (request, reply) => {
     if(!body || !body.nome || !body.senha) {
         return reply.status(400).send({
             message:"nome e senha são obrigatórios"
-        })
+    })
     }
 
     const resultado = await sql.query('INSERT INTO usuario (nome, senha) VALUES ($1, $2)', [body.nome, body.senha])
-    return 'Usuário Cadastrado'
+    reply.status(201).send({message: 'Usuário Criado!'})
 })
 
 servidor.put('/usuarios/:id', async (request, reply) => {
     const body = request.body;
     const id = request.params.id;
+
+    if (!body || !body.nome || !body.senha){
+        return reply.status(400).send({
+            message: "nome e senha são obrigatórios!"
+        })
+    } else if (!id) {
+        return reply.status(400).send({
+            message: "Faltou o ID!"
+        })
+    }
+
+    const usuario = await sql.query('select * from usuario where id = $1', [id])
+    if(usuario.rows.length === 0) {
+        return reply.status(400).send({
+            message: "Usuario não existe!"
+        })
+    }
+
     const resultado = await sql.query ('UPDATE usuario SET nome = $1, senha = $2 WHERE id = $3', [body.nome, body.senha, id])
     return 'Usuário Alterado'
 })
@@ -39,7 +57,9 @@ servidor.put('/usuarios/:id', async (request, reply) => {
 servidor.delete('/usuarios/:id', async (request, reply) => {
     const id = request.params.id
     const resultado = await sql.query('DELETE FROM usuario where id = $1', [id])
-    reply.status(200).send({message:'Usuário Deletado!'})
+    reply.status(200).send({
+        message:'Usuário Deletado!'
+    })
     console.log(resultado);
 })
 
