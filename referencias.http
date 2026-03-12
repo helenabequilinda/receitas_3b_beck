@@ -1,4 +1,6 @@
 ###
+
+
 ###
 
 
@@ -13,7 +15,8 @@ Content-Type: application/json
 
 {
     "nome": "helena",
-    "senha": "12345"
+    "senha": "12345",
+    "email": "helena_bequi@estudante.sesisenai.org.br"
 }
 
 
@@ -25,10 +28,24 @@ Content-Type: application/json
 
 {
     "nome": "helena",
-    "senha": "12345"
+    "senha": "12345",
+    "email": "helena_bequi@estudante.sesisenai.org.br"
 }
 
 ###
 
 
 DELETE http://localhost:3000/usuarios/1
+
+###
+ 
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "senha": "12345",
+    "email": "helena_bequi@estudante.sesisenai.org.br"
+}
+
+
+###
